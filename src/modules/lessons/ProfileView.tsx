@@ -19,11 +19,13 @@ export default function ProfileView({ progress, onUpdateProgress }: ProfileViewP
   const [soundEnabled, setSoundEnabled] = useState(progress.sound ?? true);
   const [saveToast, setSaveToast] = useState(false);
 
-  const level = getLevel(progress.xp);
-  const levelProgress = getLevelProgress(progress.xp);
+  const level = getLevel(progress?.xp || 0);
+  const levelProgress = getLevelProgress(progress?.xp || 0);
+  const totalAnswered = progress?.totalAnswered || 0;
+  const totalCorrect = progress?.totalCorrect || 0;
   const accuracy =
-    progress.totalAnswered > 0
-      ? Math.round((progress.totalCorrect / progress.totalAnswered) * 100)
+    totalAnswered > 0
+      ? Math.round((totalCorrect / totalAnswered) * 100)
       : 100;
 
   function handleSaveProfile() {

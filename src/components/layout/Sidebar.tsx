@@ -57,7 +57,7 @@ const navItems: NavItem[] = [
 export default function Sidebar({ activeView, onNavigate, progress }: SidebarProps) {
   return (
     <nav
-      className="sticky top-0 self-start h-dvh flex flex-col gap-1.5 py-6 px-3.5 border-r-2 border-[#DAE5EF] w-[248px]"
+      className="sticky top-0 self-start h-screen flex flex-col gap-1.5 py-6 px-3.5 border-r-2 border-[#DAE5EF] w-[248px] bg-[#F6F9FC]"
       aria-label="Navigasi utama"
     >
       {/* Logo */}
@@ -78,10 +78,11 @@ export default function Sidebar({ activeView, onNavigate, progress }: SidebarPro
       {navItems.map((item) => (
         <button
           key={item.id}
+          type="button"
           onClick={() => onNavigate(item.id)}
           aria-current={activeView === item.id ? 'page' : undefined}
           className={cn(
-            'flex items-center gap-4 px-3.5 py-3 rounded-xl border-2 font-black text-[13.5px] tracking-widest uppercase transition-colors',
+            'flex items-center gap-4 px-3.5 py-3 rounded-xl border-2 font-black text-[13.5px] tracking-widest uppercase transition-colors cursor-pointer',
             'hover:bg-[#EDF3F9]',
             activeView === item.id
               ? 'bg-[#EDF6FD] border-[#5DB8F5] text-[#1273BC]'
@@ -96,9 +97,8 @@ export default function Sidebar({ activeView, onNavigate, progress }: SidebarPro
       {/* Bottom spacer and XP */}
       <div className="mt-auto px-2 py-3 bg-[#EDF3F9] rounded-xl">
         <div className="text-xs font-black uppercase tracking-wider text-[#8AA0B4] mb-1">Total XP</div>
-        <div className="text-2xl font-display font-bold text-[#1273BC]">{progress.xp}</div>
+        <div className="text-2xl font-display font-bold text-[#1273BC]">{progress?.xp || 0}</div>
       </div>
     </nav>
   );
 }
-

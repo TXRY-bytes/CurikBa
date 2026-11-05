@@ -22,7 +22,16 @@ const leaderboardData = [
 const medals = ['🥇', '🥈', '🥉'];
 
 export default function LeaderboardView({ progress }: LeaderboardViewProps) {
-  const myEntry = { id: 'me', name: progress.name || 'Kamu', xp: progress.xp, avatar: (progress.name || 'K')[0].toUpperCase(), color: '#5DB8F5', lessons: progress.totalLessons, isMe: true };
+  const name = progress?.name || 'Kamu';
+  const myEntry = {
+    id: 'me',
+    name,
+    xp: progress?.xp || 0,
+    avatar: (name[0] || 'K').toUpperCase(),
+    color: '#5DB8F5',
+    lessons: progress?.totalLessons || 0,
+    isMe: true,
+  };
 
   const combined = [...leaderboardData, myEntry]
     .sort((a, b) => b.xp - a.xp)

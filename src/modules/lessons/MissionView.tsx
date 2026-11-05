@@ -51,12 +51,12 @@ const missions = [
 
 export default function MissionView({ progress, onUpdateProgress }: MissionViewProps) {
   function claimMission(missionId: string, xp: number) {
-    if (progress.claimedMissions[missionId]) return;
+    if (progress?.claimedMissions?.[missionId]) return;
     onUpdateProgress(p => ({
       ...p,
-      xp: p.xp + xp,
-      gems: p.gems + 5,
-      claimedMissions: { ...p.claimedMissions, [missionId]: true },
+      xp: (p?.xp || 0) + xp,
+      gems: (p?.gems || 0) + 5,
+      claimedMissions: { ...(p?.claimedMissions || {}), [missionId]: true },
     }));
   }
 
@@ -69,10 +69,10 @@ export default function MissionView({ progress, onUpdateProgress }: MissionViewP
 
       <div className="flex flex-col gap-4">
         {missions.map(m => {
-          const current = Number(progress[m.key]) || 0;
+          const current = Number(progress?.[m.key]) || 0;
           const pct = Math.min(100, (current / m.target) * 100);
           const done = current >= m.target;
-          const claimed = !!progress.claimedMissions[m.id];
+          const claimed = Boolean(progress?.claimedMissions?.[m.id]);
 
           return (
             <Card key={m.id} className={claimed ? 'opacity-60' : ''}>
@@ -121,8 +121,8 @@ export default function MissionView({ progress, onUpdateProgress }: MissionViewP
             <div className="text-4xl">🏆</div>
             <div className="flex-1">
               <h3 className="font-black text-[#14304A] mb-1">Selesaikan 10 pelajaran minggu ini</h3>
-              <ProgressBar value={Math.min(100, (progress.totalLessons / 10) * 100)} color="#9B59B6" />
-              <div className="text-xs text-[#56708A] font-bold mt-1">{Math.min(progress.totalLessons, 10)}/10 pelajaran</div>
+              <ProgressBar value={Math.min(100, ((progress?.totalLessons || 0) / 10) * 100)} color="#9B59B6" />
+              <div className="text-xs text-[#56708A] font-bold mt-1">{Math.min(progress?.totalLessons || 0, 10)}/10 pelajaran</div>
             </div>
             <div className="text-right">
               <div className="font-black text-[#9B59B6] text-sm">+100 XP</div>
@@ -134,4 +134,3 @@ export default function MissionView({ progress, onUpdateProgress }: MissionViewP
     </div>
   );
 }
-

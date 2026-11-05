@@ -58,28 +58,13 @@ const mobileNavItems: NavItem[] = [
 export default function TopBar({ activeView, onNavigate, progress }: TopBarProps) {
   return (
     <>
-      {/* Top bar - visible on tablet and below (< 1080px) */}
-      <div className="hidden md:flex lg:hidden sticky top-0 z-20 h-14 bg-[#F6F9FC] items-center justify-between gap-3 px-4 border-b-2 border-[#DAE5EF]">
+      {/* Top bar - visible on screens smaller than desktop (< xl) */}
+      <div className="flex xl:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-[#F6F9FC] items-center justify-between gap-3 px-4 border-b-2 border-[#DAE5EF]">
         <div className="flex items-center gap-2">
           <Image
             src="/images/curik1.jpeg"
-            width={34}
-            height={34}
-            alt="CurikBA Logo"
-            className="rounded-full object-cover"
-          />
-          <span className="font-display font-bold text-xl text-[#1273BC]">CurikBA</span>
-        </div>
-        <StatsBar progress={progress} />
-      </div>
-
-      {/* Top bar - visible on mobile (< 820px) */}
-      <div className="flex md:hidden sticky top-0 z-20 h-14 bg-[#F6F9FC] items-center justify-between gap-3 px-4 border-b-2 border-[#DAE5EF]">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/images/curik1.jpeg"
-            width={30}
-            height={30}
+            width={32}
+            height={32}
             alt="CurikBA Logo"
             className="rounded-full object-cover"
           />
@@ -88,19 +73,20 @@ export default function TopBar({ activeView, onNavigate, progress }: TopBarProps
         <StatsBar progress={progress} />
       </div>
 
-      {/* Bottom navigation - visible on mobile only */}
+      {/* Bottom navigation - visible on mobile only (< md) */}
       <nav
-        className="flex md:hidden fixed bottom-0 left-0 right-0 z-20 bg-white border-t-2 border-[#DAE5EF] px-2 pb-safe"
+        className="flex md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 border-[#DAE5EF] px-2 py-1 shadow-lg"
         aria-label="Navigasi bawah"
       >
         {mobileNavItems.map((item) => (
           <button
             key={item.id}
+            type="button"
             onClick={() => onNavigate(item.id)}
             aria-current={activeView === item.id ? 'page' : undefined}
             className={cn(
-              'flex flex-col items-center justify-center gap-1 flex-1 py-2.5 rounded-xl transition-colors',
-              activeView === item.id ? 'text-[#1273BC]' : 'text-[#8AA0B4]'
+              'flex flex-col items-center justify-center gap-1 flex-1 py-1.5 rounded-xl transition-colors cursor-pointer',
+              activeView === item.id ? 'text-[#1273BC] font-black' : 'text-[#8AA0B4]'
             )}
           >
             {item.icon}
@@ -111,4 +97,3 @@ export default function TopBar({ activeView, onNavigate, progress }: TopBarProps
     </>
   );
 }
-

@@ -25,17 +25,18 @@ const dailyMissions = [
 ];
 
 export default function ProgressRail({ progress }: ProgressRailProps) {
-  const level = getLevel(progress.xp);
-  const xpInLevel = getXpInLevel(progress.xp);
+  const xp = progress?.xp || 0;
+  const level = getLevel(xp);
+  const xpInLevel = getXpInLevel(xp);
   const totalLessons = CURRICULUM.flatMap(u => u.lessons).length;
-  const completedCount = Object.keys(progress.completedLessons).length;
+  const completedCount = Object.keys(progress?.completedLessons || {}).length;
 
   const lbData = leaderboardData.map(row =>
-    row.isMe ? { ...row, xp: progress.xp, name: progress.name || 'Kamu' } : row
+    row.isMe ? { ...row, xp: xp, name: progress?.name || 'Kamu' } : row
   ).sort((a, b) => b.xp - a.xp);
 
   return (
-    <aside className="sticky top-0 self-start max-h-dvh overflow-auto flex flex-col gap-5 p-6 pl-6 w-[360px]">
+    <aside className="sticky top-0 self-start max-h-screen overflow-y-auto flex flex-col gap-5 p-6 pl-6 w-[360px]">
       {/* Profile & XP Card */}
       <Card>
         <div className="flex items-center gap-3 mb-4">
@@ -43,10 +44,10 @@ export default function ProgressRail({ progress }: ProgressRailProps) {
             className="w-12 h-12 rounded-full flex items-center justify-center font-display font-bold text-xl text-[#08263F]"
             style={{ background: '#5DB8F5' }}
           >
-            {(progress.name || 'P')[0].toUpperCase()}
+            {(progress?.name || 'P')[0]?.toUpperCase() || 'P'}
           </div>
           <div>
-            <div className="font-black text-[#14304A]">{progress.name || 'Pelajar'}</div>
+            <div className="font-black text-[#14304A]">{progress?.name || 'Pelajar'}</div>
             <div className="text-xs font-bold text-[#56708A] uppercase tracking-wider">Level {level}</div>
           </div>
         </div>
@@ -56,7 +57,7 @@ export default function ProgressRail({ progress }: ProgressRailProps) {
         <ProgressBar value={xpInLevel} />
         <div className="grid grid-cols-2 gap-3 mt-4">
           <div className="bg-[#EDF3F9] rounded-xl p-3">
-            <div className="text-xl font-display font-bold text-[#1273BC]">{progress.xp}</div>
+            <div className="text-xl font-display font-bold text-[#1273BC]">{xp}</div>
             <div className="text-xs font-black text-[#56708A] uppercase tracking-wider">Total XP</div>
           </div>
           <div className="bg-[#EDF3F9] rounded-xl p-3">
@@ -74,7 +75,7 @@ export default function ProgressRail({ progress }: ProgressRailProps) {
         </div>
         <div className="flex flex-col gap-3">
           {dailyMissions.map(m => {
-            const current = Number(progress[m.key]) || 0;
+            const current = Number(progress?.[m.key]) || 0;
             const pct = Math.min(100, (current / m.target) * 100);
             const done = current >= m.target;
             return (
@@ -110,7 +111,7 @@ export default function ProgressRail({ progress }: ProgressRailProps) {
           {lbData.slice(0, 5).map((row, idx) => (
             <div
               key={row.name}
-              className={`grid gap-3 px-3 py-2.5 rounded-xl items-center`}
+              className="grid gap-3 px-3 py-2.5 rounded-xl items-center"
               style={{
                 gridTemplateColumns: '28px 36px 1fr auto',
                 background: row.isMe ? '#EDF6FD' : 'transparent',
@@ -135,4 +136,3 @@ export default function ProgressRail({ progress }: ProgressRailProps) {
     </aside>
   );
 }
-
