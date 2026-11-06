@@ -1,108 +1,67 @@
-# CurikBA – Belajar Bahasa & Aksara Bali
+# CurikBA – Aplikasi Edukasi Bahasa & Aksara Bali Berbasis AI
 
-CurikBA adalah platform web pembelajaran Bahasa Bali dan Aksara Bali interaktif bergaya **Duolingo** yang dibangun dengan **Next.js 15 (App Router)**, **React 19**, **TypeScript**, **Tailwind CSS**, dan **Google Gemini AI**.
+Mulai pengembangan project pada : 03/11/2026 s.d 06/11/2026
 
----
+## Description
+CurikBA adalah platform edukasi interaktif berbasis AI dan gamifikasi web untuk mengakselerasi literasi Bahasa dan Aksara Bali bagi generasi muda.
 
-## 🌟 Fitur Utama (MVP)
+## Problem & Target User
+- **Problem**: Erosi penggunaan Bahasa Bali halus (Anggah-Ungguh Kruna) di kalangan generasi muda dan minimnya media interaktif untuk belajar Aksara Bali digital.
+- **Target User**: Siswa sekolah (SD–SMA), mahasiswa, wisatawan domestik/mancanegara, dan diaspora Bali.
 
-1. **Jalur Belajar Gamifikasi (Learning Path)**:
-   - Tampilan jalur zigzag khas Duolingo dengan tombol 3D bertepi (elevated buttons).
-   - Status modul: Selesai, Aktif (dengan ring animasi dan maskot), Terkunci.
-   - Hadiah Peti Permata (Chest) dan Tantangan Unit (Trophy).
+## Key Features
+- **Gamified Learning Path**: 5 tipe latihan modular (Multiple Choice, Word Bank, Matching Pairs, Type Answer, Aksara Quiz).
+- **Interactive Aksara Bali Studio**: Visualisasi 18 Aksara Wreastra, Swara, dan Sandhangan berbasis Unicode U+1B00–U+1B7F.
+- **Guru Wayan AI Tutor**: Asisten tutor percakapan dan konsultasi tata krama bahasa secara real-time.
 
-2. **Mesin Latihan Modular (Modular Exercise Engine)**:
-   - **Multiple Choice**: Pemilihan kata dan arti kalimat.
-   - **Word Bank**: Penyusunan blok kata dalam urutan bahasa Bali yang benar.
-   - **Matching Pairs**: Pencocokan kosakata Bali ↔ Indonesia secara interaktif.
-   - **Type Answer**: Latihan menulis kata dalam bahasa Bali.
-   - **Aksara Quiz**: Tebak bunyi dan bentuk Aksara Bali.
-   - Desain modular: mudah menambah tipe latihan baru di `src/modules/lessons/exercises/`.
+## Tech Stack
+- Frontend: Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS
+- AI / LLM: Google Gemini API ('gemini-3.5-flash','gemini-3.8-flash','gemini-3.1-flash-lite')
+- State Management: LocalStorage Reactive Store (Hearts, Gems, XP, Streaks)
+- Hosting / Deployment: Vercel
 
-3. **Kamus & Visualisasi Aksara Bali Interaktif**:
-   - 18 Aksara Wreastra (Konsonan dasar: Ha, Na, Ca, Ra, Ka, ...).
-   - Aksara Swara (Vokal mandiri).
-   - Pangangge Suara & Tengenan (Tanda vokal & sandhangan).
-   - Fitur dengarkan pelafalan (SpeechSynthesis) dan salin karakter Unicode.
+## AI Implementation
+- Model: Google Gemini API (`@google/generative-ai`)
+- System Prompt: Socratic Tutor Persona (Guru Wayan) dengan batasan tata krama bertutur Bali dan output aksara Unicode.
+- Fallback Mechanism: Caching respon kontekstual cerdas saat koneksi internet atau kuota API terbatas.
 
-4. **Tutor AI Terintegrasi (Guru Wayan)**:
-   - Tutor interaktif ramah berbasis Google Gemini API (`gemini-1.5-flash`).
-   - Mampu menjawab tanya jawab percakapan sehari-hari, aturan aksara, dan tingkatan bahasa (Bali Alus / Andap).
-   - Fallback cerdas offline jika API key belum diisi.
+## Architecture / Data Flow
+User Input -> Next.js Frontend -> Next.js Edge/Server Route (`/api/ai-tutor`) -> Google Gemini API -> Sanitized Response & Unicode Render -> User UI
 
-5. **Gamifikasi & Progres Belajar**:
-   - Sistem XP, Permata (Gems), Nyawa (Hearts), dan Daily Streak.
-   - Misi harian dengan tombol klaim hadiah.
-   - Papan skor liga (Leaderboard).
-   - Pengaturan profil dan target belajar harian tersimpan rapi di browser (`localStorage`).
-
-6. **Desain & Responsivitas Modern**:
-   - Tema warna: Dominan Putih (`#FFFFFF`, `#F6F9FC`) dengan aksen Biru Langit (`#5DB8F5`, `#2E8FD6`, `#1273BC`).
-   - Responsif di semua ukuran layar:
-     - **Desktop (>1080px)**: 3 Kolom (Sidebar Nav, Learning Path, Progress Rail).
-     - **Tablet (820px-1080px)**: 2 Kolom dengan Top Bar statistik.
-     - **Mobile (<820px)**: 1 Kolom adaptif dengan Bottom Navigation Bar.
-   - Logo aplikasi: Menggunakan maskot resmi di `/images/curik1.jpeg`.
-   - Siap animasi `.rif` (Rive) di layar penyelesaian modul (`CompletionScreen.tsx`).
-
----
-
-## 🚀 Cara Menjalankan
-
-### 1. Menjalankan Server Pengembangan
+## Installation / Run Instructions
 ```bash
+git clone git@github.com:TXRY-bytes/CurikBa.git
+cd CurikBa
+npm install
+cp .env.example .env.local
+# Masukkan GEMINI_API_KEY Anda di .env.local
 npm run dev
 ```
-Buka browser di [http://localhost:3000](http://localhost:3000).
 
-### 2. Konfigurasi AI Tutor (Opsional)
-Buka file `.env.local` dan masukkan Google Gemini API Key Anda:
-```env
-GEMINI_API_KEY=AIzaSy...
-```
-*(Catatan: Aplikasi tetap memiliki respon interaktif bawaan untuk pertanyaan seputar bahasa Bali meskipun tanpa API key)*.
+## Deployment URL
+- Production URL: https://curik-ba.vercel.app/
 
-### 3. Build Produksi
-```bash
-npm run build
-npm run start
-```
+## Known Limitations
+- Modul TTS audio pelafalan saat ini mengandalkan Web Speech API lokal browser.
+- Kurikulum latihan saat ini mencakup tingkat pemula (Unit 1 & Unit 2).
+- AI terkadang menciptakan false positif (jawaban yg tidak sesuai)
+- Tampilan masih kurang responsif dan sering ngebug di perangkat mobile.
+- Kurikulum masih terbatas, cakupan kurikulum masih di tingkat dasar saja.
+- Integrasi AI masih terbatas, hanya bisa digunakan untuk tanya jawab, belum bisa menggenerate soal secara dinamis sesuai kebutuhan pengguna.
+- terdapat beberapa bug di sistem seperti bug nyawa yg tidak berkurang ketika salah menjawab soal.
 
----
+## Third-party Resources / Credits
+- Google Generative AI SDK
+- Lucide React & Canvas Confetti
+- Karakter Maskot Curik Bali (Aset orisinal tim)
 
-## 🧱 Arsitektur Modular
+## AI Disclosure
+- Kami memanfaatkan model gratis Gemmini & Claude AI untuk mendukung pengembangan aplikasi, mulai frontend hingga backend, di bawah kendali kami.
+- Asset seperti foto aplikasi dibuat dengan Claude AI, dengan penentuan dari kami
 
-```
-src/
-├── app/
-│   ├── layout.tsx              # Root layout & Google Fonts (Fredoka + Nunito)
-│   ├── page.tsx                # Halaman utama
-│   ├── globals.css             # Desain sistem & variabel warna
-│   └── api/ai-tutor/route.ts   # Endpoint integrasi Google Gemini
-├── components/
-│   ├── layout/
-│   │   ├── AppShell.tsx        # Shell tata letak responsif 3-kolom
-│   │   ├── Sidebar.tsx         # Navigasi kiri desktop
-│   │   ├── TopBar.tsx          # Bar atas & Bottom Nav mobile
-│   │   └── ProgressRail.tsx    # Panel statistik & misi kanan
-│   └── ui/                     # Komponen UI dasar (Button, Card, StatsBar, Mascot)
-├── modules/
-│   ├── curriculum/
-│   │   └── data.ts             # Data kurikulum & bank soal bahasa Bali
-│   ├── lessons/
-│   │   ├── LearningPath.tsx    # Jalur belajar zigzag
-│   │   ├── ExerciseEngine.tsx  # Mesin render latihan soal
-│   │   ├── CompletionScreen.tsx # Layar apresiasi & slot animasi .rif
-│   │   └── exercises/          # Modul latihan (MultipleChoice, WordBank, Pairs, dll.)
-│   ├── aksara/
-│   │   └── AksaraChart.tsx     # Tabel aksara Bali interaktif
-│   └── ai-tutor/
-│       └── AiTutor.tsx         # Chat tutor Guru Wayan
-└── lib/
-    ├── store.ts                # Penyimpanan progres & state management
-    └── utils.ts                # Helper styling (clsx + tailwind-merge)
-```
-
-### Cara Menambahkan Mata Pelajaran / Soal Baru:
-Cukup tambahkan objek `Unit` atau `Lesson` pada `src/modules/curriculum/data.ts`. Sistem akan secara otomatis membuat node pada jalur belajar dan memasukkan soal ke dalam Exercise Engine.
-
+# RUOK TEAM
+### Team Members & Information
+- Nama Ketua : Ida Bagus Gede Raditya Pradnyan Putra Kameten - [Peran: Frontend / AI Integration / Kurikulum / Web Architech]
+- Nama Anggota 1 : Putu Arya Dananjaya -
+[Peran: Desainer / Asset & Content Creator ]
+### Kategori Lomba: SMA/SMK
