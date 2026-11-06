@@ -1,0 +1,1 @@
+Ini adalah properti untuk website dan membuat video demo, folder foto.
